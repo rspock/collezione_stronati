@@ -1,0 +1,47 @@
+{% extends '::base.html.twig' %}
+
+{% block container -%}
+    <h1>Produttore list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Datacreazione</th>
+                <th>Datachiusura</th>
+                <th>Datafondazione</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('produttore_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.nome }}</td>
+                <td>{% if entity.dataCreazione %}{{ entity.dataCreazione|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.dataChiusura %}{{ entity.dataChiusura|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.dataFondazione %}{{ entity.dataFondazione|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('produttore_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('produttore_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('produttore_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

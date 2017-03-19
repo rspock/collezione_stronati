@@ -1,0 +1,35 @@
+services:
+  rs.collezionestronati.foto.upload:
+        class: Rs\CollezioneStronatiBundle\Service\UploadHandler
+        arguments: [@doctrine.orm.entity_manager, "Rs\CollezioneStronatiBundle\Entity\Foto", @router]
+  rs.collezionestronati.form.builder:
+        class: Rs\CollezioneStronatiBundle\Service\GeneratoreOggettoForm
+        arguments: [@doctrine.orm.entity_manager, @router, @form.factory]
+  rs.collezionestronati.conteggi:
+    class: Rs\CollezioneStronatiBundle\Service\Conteggi
+    arguments:
+        - @twig
+        - @doctrine.orm.entity_manager
+    tags:
+        -
+            name: kernel.event_listener
+            event: kernel.request
+            method: onKernelRequest
+  kernel.listener.accessDenied:
+      class: Rs\CollezioneStronatiBundle\Service\GestoreAccessoNegato
+      arguments:
+              - @router
+      tags:
+        - { name: kernel.event_listener, event: kernel.exception, method: onAccessDeniedException }
+
+  rs.type.entity_hidden:
+    class: Rs\CollezioneStronatiBundle\Form\BaseType\EntityHiddenType
+    arguments: ["@doctrine.orm.entity_manager"]
+    tags:
+    - { name: form.type, alias: entity_hidden }
+
+  rs.type.fotografie_hidden:
+    class: Rs\CollezioneStronatiBundle\Form\BaseType\FotoHiddenType
+    arguments: ["@doctrine.orm.entity_manager"]
+    tags:
+      - { name: form.type, alias: fotografie_hidden }

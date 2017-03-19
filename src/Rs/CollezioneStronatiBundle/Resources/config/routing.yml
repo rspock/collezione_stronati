@@ -1,0 +1,30 @@
+rs_collezione_stronati_homepage:
+    resource: "@RsCollezioneStronatiBundle/Controller/DefaultController.php"
+    type:     annotation
+    prefix:   /
+
+_oggetti:
+    resource: "@RsCollezioneStronatiBundle/Controller/OggettiController.php"
+    type:     annotation
+    prefix:   /oggetti
+
+_mignon:
+    resource: "@RsCollezioneStronatiBundle/Controller/MignonController.php"
+    type:     annotation
+    prefix:   /mignon
+_bicchiere:
+    resource: "@RsCollezioneStronatiBundle/Controller/BicchiereController.php"
+    type:     annotation
+    prefix:   /bicchiere
+_profumo:
+    resource: "@RsCollezioneStronatiBundle/Controller/ProfumoController.php"
+    type:     annotation
+    prefix:   /profumo
+_produttore:
+    resource: "@RsCollezioneStronatiBundle/Controller/ProduttoreController.php"
+    type:     annotation
+    prefix:   /produttore
+_sincronizza:
+    resource: "@RsCollezioneStronatiBundle/Controller/SincronizzaController.php"
+    type:     annotation
+    prefix:   /sincronizza

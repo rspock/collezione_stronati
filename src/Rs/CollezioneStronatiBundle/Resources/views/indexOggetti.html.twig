@@ -1,0 +1,98 @@
+{% extends (produttori|length == 0 and oggetti|length == 0) ? 'RsCollezioneStronatiBundle::unaColonna.html.twig' : 'RsCollezioneStronatiBundle::dueColonne.html.twig' %}
+
+{% if produttori|length == 0 and oggetti|length == 0 %}
+    {% set nomePagina = 'Elenco ' ~ oggetto|capitalize  %}
+    {% block contenuto -%}
+        <div class="alert alert-info">
+            <button data-dismiss="alert" class="close" type="button">×</button>
+            Nessun oggetto presente
+        </div>
+    {% endblock %}
+{% else %}
+    {% set nomePagina = 'Elenco ' ~ oggetto|capitalize  %}
+    {% set titoloColonnaUno = 'Produttori'  %}
+    {% set titoloColonnaDue = nomePagina %}
+
+    {% block contenutoColonnaUno %}
+        {% if  produttori|length > 0 %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <form>
+                            <input type="text" placeholder="Ricerca..." class="form-control" name="ricerca" id="id_search_list">
+                            <span class="input-group-btn">
+                            <button class="btn btn-flat" id="search-btn" name="seach" type="submit"><i class="fa fa-search"></i></button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <br><br>
+        <div class="row">
+            <div class="col-lg-12">
+                <ul id="elenco-produttori">
+                    {% for produttore in produttori %}
+                        <li><a href="{{ path( oggetto, {"pagina":1, "produttore":produttore.id}) }}">{{ produttore.nome }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block controlliColonnaDue %}
+        <div class="navigation">
+            {{ knp_pagination_render(oggetti) }}
+        </div>
+    {% endblock %}
+    {% block contenutoColonnaDue %}
+        {% if oggetti|length %}
+            {% set oggettiPerColonna = 3 %}
+
+            {% for oggettoCiclato in oggetti %}
+
+                {% if loop.index0 % oggettiPerColonna == 0 or loop.first %}
+                    <div class="row">
+                {% endif %}
+
+                <div class="col-lg-4">
+                        <div class="box box-solid">
+                            <div class="box-header">
+                                {% set show = oggetto ~ '_show' %}
+                                <h3 class="box-title"><a href="{{ path(show, { 'id': oggettoCiclato.id , "pagina":pagina, "produttore":produttore}) }}">{{ oggettoCiclato.descrizione }}</a></h3>
+                            </div>
+                            <div class="box-body">
+                                <a href="{{ path(show, { 'id': oggettoCiclato.id , "pagina":pagina, "produttore":produttore}) }}"><img src="data:image/jpeg;base64,{{ oggettoCiclato.foto[0].stream }}" /></a>
+                            </div>
+                        </div>
+                </div>
+
+                {% if loop.index % oggettiPerColonna == 0 or loop.last %}
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="navigation pull-right">
+                        {{ knp_pagination_render(oggetti) }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <button data-dismiss="alert" class="close" type="button">×</button>
+                Nessun oggetto presente
+            </div>
+        {% endif %}
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{asset("bundles/collezionestronati/js/jquery.quicksearch.js")}}" type="text/javascript"></script>
+        {% if  produttori|length > 0 %}
+            <script type="text/javascript">
+                $('input#id_search_list').quicksearch('ul#elenco-produttori li');
+            </script>
+        {% endif %}
+    {% endblock %}
+{% endif %}

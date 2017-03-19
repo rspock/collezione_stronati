@@ -1,0 +1,46 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block sottobarra %}
+{% if error %}
+    <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+{% endif %}
+    <div id="login-box" class="form-box">
+        <div class="header">Autenticazione</div>
+        <form method="post" action="{{ path("fos_user_security_check") }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+            <div class="body bg-gray">
+                <div class="form-group">
+                    <input type="text" placeholder="Nome utente" class="form-control" name="userid" id="username" name="_username" value="{{ last_username }}" required="required">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" value="" id="password" name="_password" required="required" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" tabindex="4" class="field login-checkbox" id="remember_me" name="_remember_me" value="on">
+                    <label for="Field" class="choice">Ricordami</label>
+                </div>
+            </div>
+            <div class="footer">
+                <button class="btn bg-olive btn-block" type="submit">Accedi</button>
+                <p><a href="#">Password dimenticata</a></p>
+            </div>
+        </form>
+    </div>
+{% endblock sottobarra %}
+
+
+<form method="post" action="/CollezioneStronati/web/app_dev.php/login_check">
+    <input type="hidden" value="oaKD1tpsF0wCG8saN3KhuufFIEXCG-YhULFEI4UyLEM" name="_csrf_token">
+
+    <label for="username">security.login.username</label>
+    <input type="text" required="required" value="" name="_username" id="username">
+
+    <label for="password">security.login.password</label>
+    <input type="password" required="required" name="_password" id="password">
+
+    <div class="icheckbox_minimal" style="position: relative;" aria-checked="false" aria-disabled="false"><input type="checkbox" value="on" name="_remember_me" id="remember_me" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div>
+    <label for="remember_me" class="">security.login.remember_me</label>
+
+    <input type="submit" value="security.login.submit" name="_submit" id="_submit">
+</form>

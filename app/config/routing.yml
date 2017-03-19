@@ -1,0 +1,9 @@
+rs_importazione:
+    resource: "@RsImportazioneBundle/Resources/config/routing.yml"
+    prefix:   /importazione
+
+rs_collezione_stronati:
+    resource: "@RsCollezioneStronatiBundle/Resources/config/routing.yml"
+    prefix:   /
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

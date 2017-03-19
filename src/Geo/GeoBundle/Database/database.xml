@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbupdate>
+    <updates>
+        <update version="1" release="GeoBundle 1.0">
+            <schemas>
+                <schema file="geo_schema.sql" note="Creazione tabelle relative al bundle Geo" />
+            </schemas>
+            <fixtures>
+                <fixture file="geo_parametri.sql" note="Popola le tabelle continenti, aree_geopolitiche e zone_altimetriche" />
+                <fixture file="geo_stati.sql" note="Popola la tabella stati* (* momentaneamente senza storicizzazione)" />
+            </fixtures>
+        </update>
+        <update version="2" release="Dati Italia 1.0">
+            <fixtures>
+                <fixture file="geo_regioni_province_it.sql" note="Popola le tabelle aree_geografica, sistemi_locale_lavoro, regioni* e province* con dati relativi all'Italia (* momentaneamente senza storicizzazione)" />
+                <fixture file="geo_comuni_it.sql" note="Popola la tabella comuni* con quelli italiani (* momentaneamente senza storicizzazione)" />
+                <fixture file="codici_catasto.sql" note="Codici catastali" />
+                <fixture file="geo_censimenti_it_01.sql" note="Censimento Legale del 21/10/2001" />
+                <fixture file="geo_censimenti_it_02.sql" note="Censimento Residenti del 31/12/2008" />
+                <fixture file="geo_censimenti_it_03.sql" note="Censimento Residenti del 31/12/2009" />
+                <fixture file="geo_censimenti_it_04.sql" note="Censimento Residenti del 31/12/2010" />
+            </fixtures>
+        </update>
+    </updates>
+</dbupdate>
+                                  

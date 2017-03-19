@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+{% block container -%}
+    <div class="box box-primary">
+        <div title="" data-toggle="tooltip" class="box-header" data-original-title="Header tooltip">
+            <h3 class="box-title">
+                {% if nomePagina is defined %}
+                    {{ nomePagina }}
+                {% endif %}
+            </h3>
+            <div class="box-tools pull-right">
+                {% block controlli %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="box-body">
+            {% block contenuto %}
+            {% endblock %}
+        </div>
+        <div class="box-footer">
+            {% block footer %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

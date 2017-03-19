@@ -1,0 +1,14 @@
+{% extends 'RsCollezioneStronatiBundle::mostraOggetto.html.twig' %}
+
+{% set oggetto = 'bicchiere' %}
+
+{% block proprietaFiglie %}
+    <tr>
+        <th>Altezza</th>
+        <td>{{ entity.altezza }}</td>
+    </tr>
+    <tr>
+        <th>Liquore</th>
+        <td>{{ entity.liquore }}</td>
+    </tr>
+{% endblock %}

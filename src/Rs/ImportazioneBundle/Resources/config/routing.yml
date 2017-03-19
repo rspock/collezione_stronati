@@ -1,0 +1,4 @@
+rs_importazione_bundle_controller:
+    resource: "@RsImportazioneBundle/Controller/DefaultController.php"
+    type:     annotation
+    prefix:   /

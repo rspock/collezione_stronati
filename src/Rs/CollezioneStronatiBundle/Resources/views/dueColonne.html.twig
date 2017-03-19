@@ -1,0 +1,53 @@
+{% extends '::base.html.twig' %}
+{% block container -%}
+    <div class="col-lg-2">
+        <div class="box box-primary">
+            <div title="" data-toggle="tooltip" class="box-header" data-original-title="Header tooltip">
+                <h3 class="box-title">
+                    {% if titoloColonnaUno is defined %}
+                        {{ titoloColonnaUno }}
+                    {% endif %}
+                </h3>
+                <div class="box-tools pull-right">
+                    {% block controlliColonnaUno %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="box-body">
+                {% block contenutoColonnaUno %}
+                {% endblock %}
+            </div>
+            <div class="box-footer">
+                {% block footerColonnaUno %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10">
+        <div class="box box-primary">
+            <div title="" data-toggle="tooltip" class="box-header" data-original-title="Header tooltip">
+                <h3 class="box-title">
+                    {% if titoloColonnaDue is defined %}
+                        {{ titoloColonnaDue }}
+                    {% endif %}
+                </h3>
+                <div class="box-tools pull-right">
+                    {% block controlliColonnaDue %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        {% block contenutoColonnaDue %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                {% block footerColonnaDue %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

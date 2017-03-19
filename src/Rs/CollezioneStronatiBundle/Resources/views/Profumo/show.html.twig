@@ -1,0 +1,28 @@
+{% extends 'RsCollezioneStronatiBundle::mostraOggetto.html.twig' %}
+
+{% set oggetto = 'profumo' %}
+
+{% block proprietaFiglie %}
+    <tr>
+        <th>Altezza</th>
+        <td>{{ entity.altezza }}</td>
+    </tr>
+    <tr>
+        <th>Contenuto</th>
+        <td>{{ entity.contenuto }}</td>
+    </tr>
+    <tr>
+        <th>Localita</th>
+        <td>{{ entity.localita }}</td>
+    </tr>
+    <tr>
+        <th>Scatola</th>
+        <td>
+            {% if entity.scatola %}
+                Si
+            {% else %}
+                No
+            {% endif %}
+        </td>
+    </tr>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'RsCollezioneStronatiBundle::unaColonna.html.twig' %}
+{% set nomePagina = 'Immagini da catalogare'  %}
+
+{% block stylesheets %}
+    <link  href="{{asset("bundles/collezionestronati/css/select2.css")}}" rel="stylesheet" type="text/css" />
+    <link  href="{{asset("bundles/collezionestronati/css/select2-bootstrap.css")}}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block contenuto -%}
+    <div class="row">
+        <div class="col-lg-4">
+        {% for foto in formMignon.vars.value.foto %}
+            <div class="box box-solid bg-gray" id="foto-{{ foto.id }}">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        {{ foto.nome }}
+                    </h3>
+                </div>
+                <div class="box-body">
+                    <img src="data:image/jpeg;base64,{{ foto.stream }}" />
+                </div>
+            </div>
+            <br>
+            <br>
+        {% endfor %}
+        </div>
+        <div class="col-lg-8">
+            <h3>Tipo Oggetto</h3>
+            <select id="tipo_oggetto">
+                <option></option>
+                <option value="mignon">Mignon</option>
+                <option value="bicchiere">Bicchiere</option>
+                <option value="profumo">Profumo</option>
+            </select>
+            <br><br><br>
+            <div id="form_mignon">
+                <h3>Mignon</h3>
+                {{ form(formMignon) }}
+            </div>
+            <br>
+            <div id="form_bicchiere">
+                <h3>Bicchiere</h3>
+                {{ form(formBicchiere) }}
+            </div>
+            <br>
+            <div id="form_profumo">
+                <h3>Profumo</h3>
+                {{ form(formProfumo) }}
+            </div>
+            <br>
+            <div id="modal_produttore" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Inserimento di un nuovo produttore</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(formProduttore) }}
+                            {{ form_errors(formProduttore) }}
+
+                            {{ form_row(formProduttore.nome) }}
+                            {{ form_row(formProduttore.dataFondazione) }}
+                            {{ form_row(formProduttore.dataChiusura) }}
+                            {{ form_row(formProduttore.indirizzo) }}
+
+                            {% for foto in formMignon.vars.value.foto %}
+                                <input type="hidden" name="fotoSelezionate[]" value="{{ foto.id }}">
+                            {% endfor %}
+                            {{ form_widget(formProduttore._token) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                            <button type="button" class="btn btn-primary" id="salva_produttore">Salva</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset("bundles/collezionestronati/js/select2.min.js")}}" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function() {
+            $("div[id^='form_']").each(function(){
+                $(this).hide();
+            });
+
+            $('#rs_collezionestronatibundle_mignon_produttore').after('<br><br><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal_produttore">Nuovo produttore</a><br><br>');
+            $('#rs_collezionestronatibundle_bicchiere_produttore').after('<br><br><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal_produttore">Nuovo produttore</a><br><br>');
+            $('#rs_collezionestronatibundle_profumo_produttore').after('<br><br><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal_produttore">Nuovo produttore</a><br><br>');
+        });
+
+        $("#tipo_oggetto").change(function(){
+            $("div[id^='form_']").each(function(){
+                $(this).hide();
+            });
+            var select = $(this).val();
+            $("#form_"+select).show();
+        });
+
+        $("#salva_produttore").click(function(){
+            $('form[name="rs_collezionestronatibundle_produttore"]').submit();
+        })
+
+        $("#rs_collezionestronatibundle_mignon_produttore").select2({
+            placeholder: "Selezionare un produttore",
+            allowClear: true,
+            width: 'resolve'
+        });
+
+        $("#rs_collezionestronatibundle_bicchiere_produttore").select2({
+            placeholder: "Selezionare un produttore",
+            allowClear: true,
+            width: 'resolve'
+        });
+
+        $("#rs_collezionestronatibundle_profumo_produttore").select2({
+            placeholder: "Selezionare un produttore",
+            allowClear: true,
+            width: 'resolve'
+        });
+
+        $("#tipo_oggetto").select2({
+            placeholder: "Selezionare un tipo di oggetto",
+            allowClear: true,
+            width: 'resolve'
+        });
+
+    </script>
+{% endblock %}
+

@@ -1,0 +1,154 @@
+{% extends 'RsCollezioneStronatiBundle::unaColonna.html.twig' %}
+
+{% set nomePagina = 'Sincronizza catalogo' %}
+{% block contenuto -%}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <button class="btn btn-primary" id="bottoneInizia">Inizia</button>
+            <button class="btn btn-primary" id="bottoneFerma">Ferma</button>
+            <br><br>
+            <div id="errore" style="color: #ff0000"> </div>
+            <br><br>
+            <table class="table table-striped table-bordered">
+                <tbody>
+                <tr>
+                    <td>RESTANTI</td>
+                    <td>EFFETTUATI</td>
+                    <td>STATO</td>
+                </tr>
+                <tr>
+                    <td id="restanti">-</td>
+                    <td id="conteggio">-</td>
+                    <td id="stato">fermo</td>
+                </tr>
+                </tbody>
+            </table>
+            <br><br>
+            <table class="table table-striped table-bordered" id="risultati">
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>DESCRIZIONE</td>
+                        <td>STATO</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var conteggio = 0;
+        var ferma = false;
+
+        $("#bottoneInizia").click(function(){
+            ferma=false;
+            $("#stato").html("in corso");
+            sincronizzaOggetto();
+        });
+
+        $("#bottoneFerma").click(function(){
+            ferma=true;
+            $("#stato").html("richiesta arresto");
+        });
+
+        function sincronizzaOggetto(){
+            //aggiorna il conteggio
+            $.ajax({
+                url: "{{ serverPath }}/sincronizza/conteggia/{{ clientName }}",
+                async: false,
+                success: function(data){
+                    var restanti = $.parseJSON(data);
+                    $("#restanti").html(restanti);
+                    if(restanti == 0){
+                        ferma = true;
+                        $("#stato").html("terminato");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    ferma = true;
+                    var err = eval("(" + xhr.responseText + ")");
+                    $("#errore").html("Errore: " + err);
+                }
+            });
+
+            if(!ferma){
+                $('#risultati tr:last').after('<tr><td id="idOggetto-'+conteggio+'">-</td><td id="descrizione-'+conteggio+'"></td><td id="stato-'+conteggio+'">iniziato</td></tr>');
+
+                //preleva l'oggetto
+                $.ajax({
+                    dataType: "json",
+                    url: "{{ serverPath }}/sincronizza/recupera-elemento/{{ clientName }}",
+                    type: 'GET',
+                    success: function(data){
+                        var oggetto = $.parseJSON(data);
+                        $('#idOggetto-'+conteggio).html(oggetto.id);
+                        $('#descrizione-'+conteggio).html(oggetto.descrizione);
+                        $('#stato-'+conteggio).html('recuperato');
+                        var tipoOggetto = oggetto.discr;
+                        $.ajax({
+                            dataType: "json",
+                            url: "{{ path('go-login') }}sincronizza/salva-elemento/"+tipoOggetto,
+                            data: {
+                                "oggetto": data
+                            },
+                            type: 'POST',
+                            success: function(data){
+                                var idOggetto = $.parseJSON(data);
+                                $('#stato-'+conteggio).html('trasmesso');
+                                $.ajax({
+                                    url: "{{ serverPath }}/sincronizza/sincronizza-elemento/{{ clientName }}/"+idOggetto,
+                                    success: function(data){
+                                        $('#stato-'+conteggio).html('completato');
+                                        conteggio++;
+                                        $("#conteggio").html(conteggio);
+                                        if(!ferma){
+                                            sincronizzaOggetto();
+                                        }else{
+                                            $("#stato").html("arrestato");
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        ferma = true;
+                                        var err = eval("(" + xhr.responseText + ")");
+                                        $("#errore").html("Errore: " + err);
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                ferma = true;
+                                var err = eval("(" + xhr.responseText + ")");
+                                $("#errore").html("Errore: " + err);
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        ferma = true;
+                        var err = eval("(" + xhr.responseText + ")");
+                        $("#errore").html("Errore: " + err);
+                    }
+                });
+            }
+        }
+
+        var createCORSRequest = function(method, url) {
+            var xhr = new XMLHttpRequest();
+            if ("withCredentials" in xhr) {
+                // Most browsers.
+                xhr.open(method, url, true);
+            } else if (typeof XDomainRequest != "undefined") {
+                // IE8 & IE9
+                xhr = new XDomainRequest();
+                xhr.open(method, url);
+            } else {
+                // CORS not supported.
+                xhr = null;
+            }
+            return xhr;
+        };
+
+    </script>
+{% endblock %}

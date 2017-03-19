@@ -1,0 +1,94 @@
+{% extends 'RsCollezioneStronatiBundle::unaColonna.html.twig' %}
+
+{% set nomePagina = "Modifica" ~ " - " ~ oggetto|capitalize ~ " - " ~ entity.descrizione %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link  href="{{asset("bundles/collezionestronati/css/select2.css")}}" rel="stylesheet" type="text/css" />
+    <link  href="{{asset("bundles/collezionestronati/css/select2-bootstrap.css")}}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block contenuto -%}
+    <div class="row">
+        <div class="col-lg-12">
+            {{ form(edit_form) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-2 col-lg-offset-4">
+                {% set mostra = oggetto ~ '_show' %}
+                <a href="{{ path(mostra, { 'id': edit_form.vars.value.id, 'pagina': pagina, 'produttore': produttore }) }}"><button class="btn"> Indietro</button></a>
+            </div>
+            <div class="col-lg-2">
+                <a href="#"><button class="btn" data-toggle="modal" data-target="#model_conferma_eliminazione">Elimina</button></a>
+                {{ form_start(delete_form) }}
+                {{ form_errors(delete_form) }}
+                {{ form_widget(delete_form._token) }}
+                {{ form_end(delete_form) }}
+            </div>
+            <div class="col-lg-2">
+                <a href="#"><button class="btn" id="salva">Salva</button></a>
+            </div>
+        </div>
+    </div>
+    <div id="model_conferma_eliminazione" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Conferma eliminazione elemento</h4>
+                </div>
+                <div class="modal-body">
+                    Vuoi davvero eliminare l'oggetto?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary" id="conferma_eliminazione">Conferma</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset("bundles/collezionestronati/js/select2.min.js")}}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $("#conferma_eliminazione").click(function(){
+            $('form[name="form"]').submit();
+        })
+
+        $("#salva").click(function(){
+            $('form[name="rs_collezionestronatibundle_{{ oggetto }}"]').submit();
+        })
+
+
+        if ( $( "#rs_collezionestronatibundle_bicchiere_produttore" ).length ) {
+            $("#rs_collezionestronatibundle_bicchiere_produttore").select2({
+                placeholder: "Selezionare un produttore",
+                allowClear: true,
+                width: 'resolve'
+            });
+        }
+
+        if ( $( "#rs_collezionestronatibundle_profumo_produttore" ).length ) {
+            $("#rs_collezionestronatibundle_profumo_produttore").select2({
+                placeholder: "Selezionare un produttore",
+                allowClear: true,
+                width: 'resolve'
+            });
+        }
+
+        if ( $( "#rs_collezionestronatibundle_mignon_produttore" ).length ) {
+            $("#rs_collezionestronatibundle_mignon_produttore").select2({
+                placeholder: "Selezionare un produttore",
+                allowClear: true,
+                width: 'resolve'
+            });
+        }
+    </script>
+{% endblock %}

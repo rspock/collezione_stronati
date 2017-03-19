@@ -1,0 +1,78 @@
+{% extends 'RsCollezioneStronatiBundle::unaColonna.html.twig' %}
+{% set nomePagina = 'Elenco immagini da catalogare'  %}
+
+{% block contenuto -%}
+        <!-- The file upload form used as target for the file upload widget -->
+            {% if listaFoto|length  %}
+                <form id="fileupload" action="{{ path('cataloga_immagine') }}" method="POST">
+
+                {% set fotoPerColonna = 4 %}
+
+                {% for foto in listaFoto %}
+
+                    {% if loop.index0 % fotoPerColonna == 0 or loop.first %}
+                        <div class="row">
+                    {% endif %}
+
+                    <div class="col-md-3">
+                        <div class="box box-solid bg-gray" id="foto-{{ foto.id }}">
+                            <div class="box-header">
+                                <h3 class="box-title">
+                                    {{ foto.nome }}
+                                </h3>
+                            </div>
+                            <div class="box-body">
+                                <img src="data:image/jpeg;base64,{{ foto.stream }}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if loop.index % fotoPerColonna == 0 or loop.last %}
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="submit" value="Cataloga" class="btn btn-primary">
+                    </div>
+                </div>
+
+                </form>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <div class="alert alert-info">
+                            <button data-dismiss="alert" class="close" type="button">×</button>
+                            Nessun elemento nuovo da catalogare
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        <br>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+
+    $("div[id^='foto-']").click(function(){
+        $(this).toggleClass("bg-red");
+        var idElemento = $(this).prop("id");
+        var idFoto = idElemento.split("-");
+        idFoto = idFoto[1];
+        if($("#fotoselezionata-"+idFoto).length ){
+            $("#fotoselezionata-"+idFoto).remove();
+        }else{
+            var input = $('<input>').attr({
+                type: 'hidden',
+                id: "fotoselezionata-"+idFoto,
+                name: 'fotoSelezionate[]',
+                value: idFoto
+            });
+            $('#fileupload').append(input);
+        }
+    })
+</script>
+{% endblock %}
